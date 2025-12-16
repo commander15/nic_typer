@@ -1,6 +1,6 @@
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:image/image.dart' as Img;
-import 'package:mrz_parser/mrz_parser.dart';
+import 'package:mrz_scanner_plus/mrz_scanner_plus.dart';
 import 'package:path_provider/path_provider.dart';
 
 class ScanService {
@@ -8,14 +8,17 @@ class ScanService {
     script: TextRecognitionScript.latin,
   );
 
+  Future<MRZResult?> scanDocumentNumber(InputImage image) async {
+    final output = await recognizer.processImage(image);
+    return MRZHelper.parse(output.text);
+  }
+
   Future<MRZResult?> detectDocumentNumber(Img.Image image) async {
-    RecognizedText text = await recognizer.processImage(
-      await preProcessImage(image),
-    );
+    final output = await recognizer.processImage(await preProcessImage(image));
 
     final RegExp mrzRegExp = RegExp(r'(.*I<CMR(\d{9})\d([A-Z]{2}\d{8})<+).*');
 
-    final preprocessed = text.text.replaceAll('\n', '').replaceAll(' ', '');
+    final preprocessed = output.text.replaceAll('\n', '').replaceAll(' ', '');
     final mrzMatch = mrzRegExp.firstMatch(preprocessed);
     if (mrzMatch == null) {
       return null;
