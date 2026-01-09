@@ -10,7 +10,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final TextEditingController _addressController = TextEditingController(
-    text: "http://192.168.1.100:8000",
+    text: "http://192.168.1.181:8000/api/v1/mrz",
   );
 
   @override
@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) =>
-                          CameraPage(serverUrl: _addressController.text),
+                          CameraPage(mrzPostUrl: _addressController.text),
                     ),
                   );
                 },
