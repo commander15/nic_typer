@@ -4,7 +4,7 @@ import 'package:mrz_parser/mrz_parser.dart';
 import 'package:nic_typer/mrz/mrz_parser.dart';
 import 'package:path_provider/path_provider.dart';
 
-class ScanService {
+class ScanService3 {
   final TextRecognizer recognizer = TextRecognizer(
     script: TextRecognitionScript.latin,
   );
@@ -36,7 +36,10 @@ class ScanService {
   Future<MRZResult?> detectDocumentNumber(String mrzString) async {
     final RegExp mrzRegExp = RegExp(r'(.*I<CMR(\d{9})\d([A-Z]{2}\d{8}).*)');
 
-    final preprocessed = mrzString.replaceAll('\n', '').replaceAll(' ', '').replaceAll('O', '0');
+    final preprocessed = mrzString
+        .replaceAll('\n', '')
+        .replaceAll(' ', '')
+        .replaceAll('O', '0');
     final mrzMatch = mrzRegExp.firstMatch(preprocessed);
     if (mrzMatch == null) {
       return null;
